@@ -36,8 +36,8 @@ import static java.lang.String.valueOf;
 public class MainActivity extends AppCompatActivity {
 
     private int flagProportionConstrained = 0, width = 0, height = 0,dontChangew = 0, dontChangeh = 0;
-    TextInputEditText imageLink;
-    Spinner spinner;
+    private TextInputEditText imageLink;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
