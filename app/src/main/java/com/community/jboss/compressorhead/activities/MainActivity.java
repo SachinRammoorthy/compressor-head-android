@@ -1,8 +1,10 @@
 package com.community.jboss.compressorhead.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -11,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,9 +20,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,8 @@ import static java.lang.String.valueOf;
 public class MainActivity extends AppCompatActivity {
 
     private int flagProportionConstrained = 0, width = 0, height = 0,dontChangew = 0, dontChangeh = 0;
+    TextInputEditText imageLink;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         percentBar.setMax(100);
         percentBar.setProgress(100);
         percentBar.setEnabled(false);
+        spinner = findViewById(R.id.format);
         percentBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -87,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
         });
         Button Preview = findViewById(R.id.preview);
         Preview.setOnClickListener((View v) -> {
-                TextInputEditText imageLink = findViewById(R.id.imageURL);
+                 imageLink = findViewById(R.id.imageURL);
                 ImageView imagePreview = findViewById(R.id.imagePreview);
-                Picasso.with(MainActivity.this).load(imageLink.getText().toString()).into(imagePreview, new Callback() {
+                Picasso.with(MainActivity.this).load(imageLink.getText().toString()).placeholder(R.drawable.ic_file_download_24dp).into(imagePreview, new Callback() {
                     @Override
                     public void onSuccess() {
                         Picasso.with(MainActivity.this).load(imageLink.getText().toString()).into(new Target() {
@@ -163,6 +167,16 @@ public class MainActivity extends AppCompatActivity {
                     dontChangew = 0;
                 }
             }
+        });
+
+
+        Button Download = findViewById(R.id.download);
+        Download.setOnClickListener((View view) -> {
+            imageLink = findViewById(R.id.imageURL);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("http://compressor-head.appspot.com/image/?image_url=" + imageLink.getText().toString() + "&width=" + pxWidth.getText().toString() + "&height=" + pxHeight.getText().toString() + "&format="+ spinner.getSelectedItem().toString()));
+            startActivity(i);
+
         });
     }
 
